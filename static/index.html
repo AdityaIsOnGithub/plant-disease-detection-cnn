@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AFTERIT // Automated Plant Disease Detection via CNNs</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600;700&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-void: #050505;
+      --card-bg: rgba(12, 12, 14, 0.78);
+      --border-subtle: rgba(255, 255, 255, 0.08);
+      --accent-neon: #10b981;
+      --accent-cyan: #06b6d4;
+    }
+    body {
+      background-color: var(--bg-void);
+      background-image:
+        radial-gradient(circle at 15% 15%, rgba(16, 185, 129, 0.08), transparent 35%),
+        radial-gradient(circle at 85% 80%, rgba(6, 182, 212, 0.07), transparent 35%),
+        linear-gradient(to right, rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+      background-size: 100% 100%, 100% 100%, 36px 36px, 36px 36px;
+      font-family: 'Inter', sans-serif;
+      color: #f4f4f5;
+    }
+    h1, h2, .font-display {
+      font-family: 'Space Grotesk', sans-serif;
+    }
+    .font-mono {
+      font-family: 'JetBrains Mono', monospace;
+    }
+    .cyber-card {
+      background: var(--card-bg);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid var(--border-subtle);
+      box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.7);
+      transition: border-color 0.25s ease, box-shadow 0.25s ease;
+    }
+    .cyber-card:hover {
+      border-color: rgba(16, 185, 129, 0.28);
+    }
+    .neon-btn {
+      background: linear-gradient(135deg, #10b981 0%, #059669 50%, #0d9488 100%);
+      box-shadow: 0 0 24px rgba(16, 185, 129, 0.25);
+      transition: all 0.2s ease;
+    }
+    .neon-btn:hover {
+      box-shadow: 0 0 32px rgba(16, 185, 129, 0.45);
+      transform: translateY(-1px);
+    }
+    .chip-btn {
+      background: rgba(18, 18, 22, 0.9);
+      border: 1px solid rgba(255, 255, 255, 0.07);
+      transition: all 0.2s ease;
+    }
+    .chip-btn:hover {
+      border-color: rgba(16, 185, 129, 0.5);
+      background: rgba(16, 185, 129, 0.08);
+      transform: translateY(-1px);
+    }
+  </style>
+</head>
+<body class="min-h-screen p-5 md:p-8 selection:bg-emerald-500/30 selection:text-emerald-200">
+  <div class="max-w-6xl mx-auto space-y-6">
+
+    <!-- Top Navigation / Status Header -->
+    <header class="cyber-card rounded-2xl p-5 md:px-7 flex flex-wrap items-center justify-between gap-4">
+      <div class="space-y-1">
+        <div class="flex items-center gap-2.5">
+          <span class="inline-block w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+          <span class="text-[11px] font-mono uppercase tracking-[0.2em] text-emerald-400/90">
+            AFTERIT // DEEP VISION ENGINE v2.0
+          </span>
+        </div>
+        <h1 class="text-2xl md:text-3xl font-bold tracking-tight bg-gradient-to-r from-white via-zinc-200 to-emerald-400 bg-clip-text text-transparent">
+          Automated Plant Disease Detection via CNNs
+        </h1>
+        <p class="text-xs md:text-sm text-zinc-400">
+          38-Class PlantVillage MobileNetV2 + Conv_1 Spatial Feature Activation & OOD Guardrail (<150ms Edge SLA)
+        </p>
+      </div>
+      <div class="flex flex-wrap items-center gap-2.5">
+        <span class="px-3 py-1.5 text-xs font-mono bg-emerald-500/10 text-emerald-300 border border-emerald-500/30 rounded-lg">
+          TensorFlow / PyTorch
+        </span>
+        <span class="px-3 py-1.5 text-xs font-mono bg-zinc-900/90 text-zinc-300 border border-zinc-800 rounded-lg">
+          FastAPI + Pytest
+        </span>
+      </div>
+    </header>
+
+    <!-- Main Content Grid -->
+    <div class="grid lg:grid-cols-12 gap-6">
+
+      <!-- Left Column: Input Control & Spatial Vision Preview -->
+      <div class="lg:col-span-5 cyber-card rounded-2xl p-6 space-y-5">
+        <div class="flex items-center justify-between">
+          <div>
+            <span class="text-[10px] font-mono uppercase tracking-widest text-emerald-400">MODULE 01</span>
+            <h2 class="text-lg font-bold text-white">Leaf Tensor Input</h2>
+          </div>
+          <span class="text-[11px] font-mono text-zinc-500">224x224x3 RGB</span>
+        </div>
+        <p class="text-xs text-zinc-400 leading-relaxed">
+          Upload any real crop or plant leaf photograph to execute deep convolutional inference, or trigger a calibrated test specimen below.
+        </p>
+
+        <form id="uploadForm" class="space-y-4">
+          <label class="group block border border-dashed border-zinc-800 hover:border-emerald-500/60 rounded-xl p-4 text-center cursor-pointer transition bg-black/50">
+            <span class="text-xs text-zinc-300 group-hover:text-emerald-300 transition block mb-2.5 font-mono">
+              [ Select Leaf Specimen Image (JPG / PNG) ]
+            </span>
+            <input type="file" id="imageInput" accept="image/*"
+              class="block w-full text-xs text-zinc-400 file:mr-3 file:py-1.5 file:px-3.5 file:rounded-lg file:border-0 file:bg-zinc-800 file:text-emerald-300 file:font-mono hover:file:bg-zinc-700 cursor-pointer" />
+          </label>
+          <button type="submit" id="runBtn"
+            class="neon-btn w-full py-3 rounded-xl font-display font-bold text-sm text-black tracking-wide">
+            EXECUTE CNN & SPATIAL DIAGNOSTICS →
+          </button>
+        </form>
+
+        <!-- One-Click Calibrated Test Samples -->
+        <div class="space-y-2.5 pt-3 border-t border-zinc-900">
+          <div class="flex items-center justify-between">
+            <span class="text-[11px] font-mono uppercase tracking-wider text-zinc-400">
+              Calibrated Test Specimens
+            </span>
+            <span class="text-[10px] font-mono text-zinc-600">INSTANT LOAD</span>
+          </div>
+          <div class="grid grid-cols-2 gap-2 text-xs font-mono">
+            <button onclick="testSample('healthy_leaf.jpg')" class="chip-btn p-2.5 rounded-xl text-left text-emerald-400">
+              ● Healthy_Leaf
+            </button>
+            <button onclick="testSample('bacterial_blight.jpg')" class="chip-btn p-2.5 rounded-xl text-left text-amber-300">
+              ● Bacterial_Blight
+            </button>
+            <button onclick="testSample('early_leaf_spot.jpg')" class="chip-btn p-2.5 rounded-xl text-left text-rose-400">
+              ● Early_Leaf_Spot
+            </button>
+            <button onclick="testSample('fungal_leaf_rust.jpg')" class="chip-btn p-2.5 rounded-xl text-left text-orange-400">
+              ● Fungal_Leaf_Rust
+            </button>
+            <button onclick="testSample('powdery_mildew.jpg')" class="chip-btn col-span-2 p-2.5 rounded-xl text-left text-cyan-300">
+              ● Powdery_Mildew
+            </button>
+          </div>
+        </div>
+
+        <!-- Side-by-Side Image & Spatial Heatmap Preview -->
+        <div id="visionPanel" class="hidden pt-4 border-t border-zinc-900 space-y-3">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-mono uppercase tracking-wider text-zinc-300">
+              Conv_1 Spatial Feature Activation Map
+            </span>
+            <span class="text-[10px] font-mono text-emerald-400">GRAD-CAM OVERLAY</span>
+          </div>
+          <div class="grid grid-cols-2 gap-3">
+            <div class="bg-black/70 p-2.5 rounded-xl border border-zinc-900 text-center">
+              <img id="origPreview" class="w-full h-36 object-cover rounded-lg border border-zinc-800/80" alt="Original Leaf" />
+              <span class="text-[11px] font-mono text-zinc-400 mt-2 block">01 // Input Tensor</span>
+            </div>
+            <div class="bg-black/70 p-2.5 rounded-xl border border-emerald-950/60 text-center">
+              <img id="heatmapPreview" class="w-full h-36 object-cover rounded-lg border border-emerald-500/20" alt="Lesion Heatmap" />
+              <span class="text-[11px] font-mono text-emerald-400 mt-2 block">02 // Neural CAM Map</span>
+            </div>
+          </div>
+          <p class="text-[11px] text-zinc-400 font-mono bg-black/50 p-2 rounded-lg border border-zinc-900">
+            Activation Spectrum: <span class="text-rose-400">Red=Peak Lesion Focus</span> | <span class="text-amber-300">Yellow=Chlorosis Halo</span> | <span class="text-cyan-400">Blue=Baseline Lamina</span>
+          </p>
+        </div>
+      </div>
+
+      <!-- Right Column: Real-Time Telemetry & IJSRT Benchmark -->
+      <div class="lg:col-span-7 space-y-6">
+
+        <!-- Diagnostic Results Card -->
+        <div class="cyber-card rounded-2xl p-6 space-y-5">
+          <div class="flex flex-wrap items-center justify-between border-b border-zinc-900 pb-3.5 gap-2">
+            <div>
+              <span class="text-[10px] font-mono uppercase tracking-widest text-cyan-400">MODULE 02</span>
+              <h2 class="text-lg font-bold text-white">Real-Time CNN Diagnostic Telemetry</h2>
+            </div>
+            <span id="latencyBadge" class="px-3 py-1 text-xs font-mono bg-black text-emerald-400 border border-emerald-500/30 rounded-full">
+              Awaiting Tensor...
+            </span>
+          </div>
+
+          <div id="emptyState" class="py-12 text-center text-sm text-zinc-500 font-mono">
+            // Select a calibrated leaf specimen or upload an image to stream CNN telemetry.
+          </div>
+
+          <div id="telemetryContent" class="hidden space-y-5">
+            <div class="grid sm:grid-cols-3 gap-3 font-mono">
+              <div class="p-3.5 bg-black/70 border border-zinc-900 rounded-xl">
+                <span class="text-[11px] text-zinc-500 uppercase block">Predicted Pathology</span>
+                <span id="resClass" class="text-sm md:text-base font-bold text-emerald-400 mt-1 block"></span>
+              </div>
+              <div class="p-3.5 bg-black/70 border border-zinc-900 rounded-xl">
+                <span class="text-[11px] text-zinc-500 uppercase block">Confidence Score</span>
+                <span id="resConf" class="text-base md:text-lg font-bold text-white mt-1 block"></span>
+              </div>
+              <div class="p-3.5 bg-black/70 border border-zinc-900 rounded-xl">
+                <span class="text-[11px] text-zinc-500 uppercase block">Execution Pipeline</span>
+                <span id="resFallback" class="text-xs font-bold mt-1.5 block"></span>
+              </div>
+            </div>
+
+            <!-- Spatial Tissue Breakdown -->
+            <div class="p-4 bg-black/60 border border-zinc-900 rounded-xl space-y-3">
+              <div class="flex items-center justify-between">
+                <span class="text-xs font-mono uppercase tracking-wider text-zinc-300">
+                  Spatial Tissue Pathology Breakdown (% of Leaf Lamina)
+                </span>
+                <span class="text-[10px] font-mono text-zinc-500">HSV / RGB SEGMENTATION</span>
+              </div>
+              <div id="spatialBars" class="space-y-2.5 text-xs font-mono"></div>
+            </div>
+
+            <!-- Treatment & Note -->
+            <div class="p-4 bg-emerald-950/15 border border-emerald-500/25 rounded-xl space-y-2">
+              <div class="flex items-center gap-2 text-xs font-mono uppercase tracking-wider text-emerald-400">
+                <span>✦ Recommended Agronomic Treatment Protocol</span>
+              </div>
+              <p id="resTreatment" class="text-xs md:text-sm text-zinc-200 leading-relaxed"></p>
+              <p id="resNote" class="text-[11px] font-mono text-zinc-400 pt-2 border-t border-zinc-900"></p>
+            </div>
+          </div>
+        </div>
+
+        <!-- IJSRT Sequential Keras Architecture Benchmark Card -->
+        <div class="cyber-card rounded-2xl p-6 space-y-4">
+          <div class="flex items-center justify-between">
+            <div>
+              <span class="text-[10px] font-mono uppercase tracking-widest text-emerald-400">MODULE 03 // IJSRT PUBLICATION</span>
+              <h2 class="text-lg font-bold text-white">
+                Sequential Keras Architecture Benchmark
+              </h2>
+              <p class="text-xs text-zinc-400">
+                Empirical comparison of parameter footprint, validation accuracy, and local tensor latency
+              </p>
+            </div>
+          </div>
+          <div class="overflow-x-auto bg-black/60 border border-zinc-900 rounded-xl p-2">
+            <table class="w-full text-left text-xs font-mono border-collapse">
+              <thead>
+                <tr class="border-b border-zinc-800 text-zinc-400">
+                  <th class="py-2.5 px-3">Keras Architecture</th>
+                  <th class="py-2.5 px-3">Parameters</th>
+                  <th class="py-2.5 px-3">Val Accuracy</th>
+                  <th class="py-2.5 px-3">Inference Latency</th>
+                </tr>
+              </thead>
+              <tbody id="benchmarkTable" class="divide-y divide-zinc-900"></tbody>
+            </table>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <script>
+    async function loadBenchmarks() {
+      const res = await fetch('/benchmarks');
+      const data = await res.json();
+      const tbody = document.getElementById('benchmarkTable');
+      tbody.innerHTML = '';
+      (data.benchmarks || []).forEach(b => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td class="py-2.5 px-3 font-semibold text-emerald-300">${b.architecture}</td>
+          <td class="py-2.5 px-3 text-zinc-300">${b.parameters.toLocaleString()}</td>
+          <td class="py-2.5 px-3 text-emerald-400">${b.val_accuracy_pct}%</td>
+          <td class="py-2.5 px-3 text-cyan-300">${b.avg_inference_latency_ms} ms</td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    function renderTelemetry(data, previewUrl) {
+      document.getElementById('emptyState').classList.add('hidden');
+      document.getElementById('telemetryContent').classList.remove('hidden');
+      document.getElementById('visionPanel').classList.remove('hidden');
+
+      document.getElementById('origPreview').src = previewUrl;
+      document.getElementById('heatmapPreview').src = data.heatmap_base64;
+
+      document.getElementById('latencyBadge').textContent = `Latency: ${data.latency_ms} ms (<150ms SLA)`;
+      document.getElementById('resClass').textContent = data.predicted_class;
+      document.getElementById('resConf').textContent = `${(data.confidence * 100).toFixed(1)}%`;
+
+      const fbEl = document.getElementById('resFallback');
+      fbEl.textContent = data.fallback_triggered ? 'OOD / SPATIAL GUARDRAIL' : 'PRIMARY DEEP CNN';
+      fbEl.className = data.fallback_triggered ? 'text-xs font-bold text-amber-400 mt-1.5 block' : 'text-xs font-bold text-emerald-400 mt-1.5 block';
+
+      document.getElementById('resTreatment').textContent = data.treatment_recommendation;
+      document.getElementById('resNote').textContent = data.diagnostic_note;
+
+      const sf = data.spatial_features;
+      const metrics = [
+        { label: 'Healthy Chlorophyll Tissue', val: sf.healthy_chlorophyll_pct, color: 'bg-emerald-500' },
+        { label: 'Necrotic Brown/Black Lesions', val: sf.necrotic_lesion_pct, color: 'bg-rose-500' },
+        { label: 'Chlorotic Yellowing Halos', val: sf.chlorotic_halo_pct, color: 'bg-amber-400' },
+        { label: 'Rust Spore Pustules', val: sf.rust_pustule_pct, color: 'bg-orange-500' },
+        { label: 'Powdery Fungal Mycelium', val: sf.powdery_mycelium_pct, color: 'bg-cyan-400' }
+      ];
+
+      const barsContainer = document.getElementById('spatialBars');
+      barsContainer.innerHTML = '';
+      metrics.forEach(m => {
+        const width = Math.min(100, Math.max(2, m.val));
+        barsContainer.innerHTML += `
+          <div>
+            <div class="flex justify-between text-[11px] mb-1">
+              <span class="text-zinc-400">${m.label}</span>
+              <span class="text-zinc-200 font-bold">${m.val}%</span>
+            </div>
+            <div class="w-full bg-zinc-900 h-1.5 rounded-full overflow-hidden">
+              <div class="${m.color} h-1.5 rounded-full" style="width: ${width}%"></div>
+            </div>
+          </div>
+        `;
+      });
+    }
+
+    document.getElementById('uploadForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const fileInput = document.getElementById('imageInput');
+      if (!fileInput.files[0]) {
+        alert('Please choose an image file or click one of the Calibrated Test Specimens below.');
+        return;
+      }
+      const file = fileInput.files[0];
+      const previewUrl = URL.createObjectURL(file);
+      const formData = new FormData();
+      formData.append('file', file);
+
+      const res = await fetch('/predict', { method: 'POST', body: formData });
+      const data = await res.json();
+      renderTelemetry(data, previewUrl);
+    });
+
+    async function testSample(filename) {
+      const sampleUrl = `/samples/${filename}`;
+      const imgRes = await fetch(sampleUrl);
+      const blob = await imgRes.blob();
+      const formData = new FormData();
+      formData.append('file', blob, filename);
+
+      const res = await fetch('/predict', { method: 'POST', body: formData });
+      const data = await res.json();
+      renderTelemetry(data, sampleUrl);
+    }
+
+    loadBenchmarks();
+    testSample('bacterial_blight.jpg');
+  </script>
+</body>
+</html>

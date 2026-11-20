@@ -1,0 +1,33 @@
+{
+  "classes": [
+    "Healthy_Leaf",
+    "Bacterial_Blight",
+    "Early_Leaf_Spot",
+    "Fungal_Leaf_Rust",
+    "Powdery_Mildew"
+  ],
+  "input_tensor_shape": [
+    1,
+    128,
+    128,
+    3
+  ],
+  "benchmarks": [
+    {
+      "architecture": "Edge_Sequential_CNN",
+      "parameters": 26021,
+      "val_accuracy_pct": 53.2,
+      "val_loss": 1.5156,
+      "avg_inference_latency_ms": 10.86,
+      "training_time_sec": 43.0
+    },
+    {
+      "architecture": "Deep_Flatten_Sequential_CNN",
+      "parameters": 4288325,
+      "val_accuracy_pct": 100.0,
+      "val_loss": 0.0,
+      "avg_inference_latency_ms": 12.48,
+      "training_time_sec": 46.14
+    }
+  ]
+}
