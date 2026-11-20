@@ -1,18 +1,28 @@
 # Automated Plant Disease Detection via CNNs
 
-End-to-end agricultural pathology diagnostics pipeline combining a **38-Class PlantVillage MobileNetV2 Deep Convolutional Network**, **Sequential Keras CNN Architecture Benchmarking (IJSRT Study)**, **Conv_1 Spatial Feature Activation Heatmaps**, and an **Out-of-Distribution (OOD) Foliage Gatekeeper** executing in **<150ms**.
+An end-to-end agricultural pathology diagnostics pipeline combining a **38-Class PlantVillage MobileNetV2 Deep Convolutional Network**, **Conv_1 Spatial Feature Activation Heatmaps**, **Out-of-Distribution (OOD) Foliage Gatekeeping**, and an optimized FastAPI backend executing in **<150ms**.
+
+## Architecture & Tech Stack
+- **Deep Learning**: PyTorch, TensorFlow / Keras, Hugging Face Transformers (`linkanjarad/mobilenet_v2_1.0_224-plant-disease-identification`)
+- **Backend API & Testing**: FastAPI, Uvicorn, Pydantic, Pytest
+- **Frontend**: Tailwind CSS, Space Grotesk / JetBrains Mono, Grad-CAM neural activation overlays
+- **Containerization**: Docker (WSL 2 backend)
 
 ## Key Features
-- **38-Class Deep Plant Pathology Inference**: Identifies bacterial, fungal, viral, and pest pathologies across major crop species with real agronomic treatment protocols.
-- **Sub-150ms Local Tensor Inference**: Pre-warmed PyTorch/TensorFlow tensor graphs with deterministic OOD guardrails against non-botanical inputs.
-- **Conv_1 Spatial Activation & Tissue Segmentation**: Real-time neural activation overlay paired with HSV/RGB chlorophyll, necrosis, chlorosis, rust, and mycelium lamina segmentation.
-- **Edge CLI & Automated Pytest Suite**: Includes `cli.py` for headless edge diagnostics and `test_app.py` enforcing schema and latency SLAs.
+- **38-Class PlantVillage Inference**: Identifies bacterial, fungal, viral, and pest pathologies across major crop species with agronomic treatment protocols.
+- **OOD Deep Vision Gatekeeper**: Rejects non-botanical inputs using ImageNet classification and chlorophyll density thresholds.
+- **Real-Time Grad-CAM Attribution**: Extracts neural activation heatmaps directly from convolutional feature maps to highlight lesion focus areas.
+- **Sub-150ms Edge Latency SLA**: Pre-warmed tensor graphs optimized for real-time local inference.
 
 ## Quick Start
+
 ```bash
+git clone https://github.com/AdityaIsOnGithub/plant-disease-detection-cnn.git
+cd plant-disease-detection-cnn
+
 python -m venv .venv
-.\.venv\Scripts\Activate.ps1
+.\.venv\Scripts\Activate.ps1   # Windows PowerShell
 pip install -r requirements.txt
-python train_and_benchmark.py --epochs 10
+
 pytest -v
 uvicorn main:app --reload
